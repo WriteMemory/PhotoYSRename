@@ -30,11 +30,26 @@ namespace ConsoleApplicationRename
             string[] files = Directory.GetFiles(dirPath, "*_ys.*");
             foreach (var item in files)
             {
-                string afterName = item.Remove(item.LastIndexOf("_ys"), 3);
-                //Console.WriteLine(afterName);
-                Console.WriteLine(item);
-                File.Delete(afterName);
-                File.Move(item, afterName);
+                try
+                {
+                    string afterName = item.Remove(item.LastIndexOf("_ys"), 3); //原始文件
+                    //Console.WriteLine(afterName);
+                    if (new FileInfo(item).Length < new FileInfo(afterName).Length)//大小对比
+                    {
+                        Console.WriteLine(item);
+                        File.Delete(afterName);
+                        File.Move(item, afterName);
+                    }
+                    else//比原始文件大就不要重建之后的文件了。
+                    {
+                        File.Delete(item);
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    //throw;
+                }
             }
         }
     }
